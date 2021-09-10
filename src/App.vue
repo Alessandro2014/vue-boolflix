@@ -12,11 +12,13 @@
         <img src="" alt="">
         <h4>{{ movie.title }}</h4>
         <h4>{{ movie.original_title }}</h4> 
+        <span>Lingua originale: </span>  
         <img class="original-language" v-if="movie.original_language === 'en'" src="@/assets/images/en.png" alt="language" /> 
         <img class="original-language" v-if="movie.original_language === 'it'" src="@/assets/images/it.png" alt="language" /> 
-
-        <h6> {{ movie.vote_average }} </h6> 
+        <span v-if="movie.original_language != 'en' && movie.original_language != 'it'"> {{ movie.original_language }} </span>
+        <div> {{ movie.vote_average }} </div> 
       </div>
+
     </main>
   </div>
 </template>
@@ -29,6 +31,7 @@ export default {
     return {
       userSearch: "",
       movies: [],
+      series: [],
       baseUri: "https://api.themoviedb.org/3",
       api_key: "e5fb8db6d95f138adcc64dfab8283c0c",
     };
@@ -44,6 +47,10 @@ export default {
       this.resetInput();
     },
 
+    getResult() {
+    return this.movies = [this.movies, ...this.series] 
+    },
+
     getMovies() {
     const params = {
         params: {
@@ -56,15 +63,25 @@ export default {
     axios.get(`${this.baseUri}/search/movie`, params).then((res) => {
       this.movies = res.data.results;
     });
+    },
+    
+    getSeries() {
+      const params = {
+          params: {
+            api_key: this.api_key,
+            query: this.userSearch,
+            language: "it-IT",
+          },
+        };
 
-    // getLanguage() {
-    //   if() {
-    //     this.movie.original_language = img
-    //   }
-    // },
+      axios.get(`${this.baseUri}/search/tv`, params).then((res) => {
+        this.series = res.data.results;
+      });
+    },
   },
+  computed: {
+    
   },
-  computed: {},
   
 }
 </script>
