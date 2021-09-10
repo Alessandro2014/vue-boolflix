@@ -8,8 +8,14 @@
 
     </header>
     <main>
-      <div v-for="(movie, id) in filteredMovies" :key="id">
+      <div v-for="(movie, id) in movies" :key="id">
+        <img src="" alt="">
+        <h4>{{ movie.title }}</h4>
+        <h4>{{ movie.original_title }}</h4> 
+        <img class="original-language" v-if="movie.original_language === 'en'" src="@/assets/images/en.png" alt="language" /> 
+        <img class="original-language" v-if="movie.original_language === 'it'" src="@/assets/images/it.png" alt="language" /> 
 
+        <h6> {{ movie.vote_average }} </h6> 
       </div>
     </main>
   </div>
@@ -33,22 +39,33 @@ export default {
     resetInput() {
       this.userSearch = "";
     },
-    search(userText) {
-      this.userSearch = userText;
+    search() {
+      this.getMovies()
       this.resetInput();
-    }
-  },
-  computed: {
-    filteredMovies(){
-      return this.movies.filter((movies) => movies.title.includes(this.userSearch));
-    }
-  },
-  created() {
-    axios.get(`${this.baseUri}/search/movie?api_key=${this.api_key}&query=${this.userSearch}`).then((res) => {
+    },
+
+    getMovies() {
+    const params = {
+        params: {
+          api_key: this.api_key,
+          query: this.userSearch,
+          language: "it-IT",
+        },
+      };
+
+    axios.get(`${this.baseUri}/search/movie`, params).then((res) => {
       this.movies = res.data.results;
-      //https://api.themoviedb.org/3/search/movie?api_key=e99307154c6dfb0b4750f6603256716d&query=ritorno+al+futuro
     });
+
+    // getLanguage() {
+    //   if() {
+    //     this.movie.original_language = img
+    //   }
+    // },
   },
+  },
+  computed: {},
+  
 }
 </script>
 
@@ -77,6 +94,11 @@ header {
 input, button {
   padding: 5px 20px;
   margin: 0 10px;
+}
+
+.original-language {
+  height: auto;
+  width: 30px;
 }
 
 
