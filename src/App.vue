@@ -1,11 +1,14 @@
 <template>
   <div id="app">
     <header>
-      <input type="search" value="" placeholder="Ricerca film">
-      <button>Cerca</button>
+      <input type="text" placeholder="Ricerca film"
+          v-model.trim="userSearch">
+      <button @click="search">Cerca</button>
+      <button @click="resetInput">Reset</button>
+
     </header>
     <main>
-      <div>
+      <div v-for="(movie, id) in filteredMovies" :key="id">
 
       </div>
     </main>
@@ -16,16 +19,36 @@
 import axios from "axios";
 export default {
   name: 'App',
-
+  data() {
+    return {
+      userSearch: "",
+      movies: [],
+      baseUri: "https://api.themoviedb.org/3",
+      api_key: "e5fb8db6d95f138adcc64dfab8283c0c",
+    };
+  },
   components: {
-    
+  },
+  methods: {
+    resetInput() {
+      this.userSearch = "";
+    },
+    search(userText) {
+      this.userSearch = userText;
+      this.resetInput();
+    }
+  },
+  computed: {
+    filteredMovies(){
+      return this.movies.filter((movies) => movies.title.includes(this.userSearch));
+    }
   },
   created() {
-    //${query}
-    axios.get('https://api.themoviedb.org/3/movie/550?api_key=e5fb8db6d95f138adcc64dfab8283c0c').then((res) => {
-      console.log(res);
+    axios.get(`${this.baseUri}/search/movie?api_key=${this.api_key}&query=${this.userSearch}`).then((res) => {
+      this.movies = res.data.results;
+      //https://api.themoviedb.org/3/search/movie?api_key=e99307154c6dfb0b4750f6603256716d&query=ritorno+al+futuro
     });
-  }
+  },
 }
 </script>
 
