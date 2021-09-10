@@ -8,7 +8,7 @@
 
     </header>
     <main>
-      <div v-for="(movie, id) in movies" :key="id">
+      <div v-for="(movie, id) in catalogo" :key="id">
         <img src="" alt="">
         <h4>{{ movie.title }}</h4>
         <h4>{{ movie.original_title }}</h4> 
@@ -32,6 +32,7 @@ export default {
       userSearch: "",
       movies: [],
       series: [],
+      catalogo: [],
       baseUri: "https://api.themoviedb.org/3",
       api_key: "e5fb8db6d95f138adcc64dfab8283c0c",
     };
@@ -43,15 +44,13 @@ export default {
       this.userSearch = "";
     },
     search() {
-      this.getMovies()
+      this.getMovies();
+      this.getSeries();
       this.resetInput();
     },
 
-    getResult() {
-    return this.movies = [this.movies, ...this.series] 
-    },
-
     getMovies() {
+      console.log(this.getMovies);
     const params = {
         params: {
           api_key: this.api_key,
@@ -62,10 +61,13 @@ export default {
 
     axios.get(`${this.baseUri}/search/movie`, params).then((res) => {
       this.movies = res.data.results;
+      this.catalogo = [...this.movies, ...this.series];
     });
     },
     
     getSeries() {
+      console.log(this.getSeries);
+
       const params = {
           params: {
             api_key: this.api_key,
@@ -76,6 +78,7 @@ export default {
 
       axios.get(`${this.baseUri}/search/tv`, params).then((res) => {
         this.series = res.data.results;
+        this.catalogo = [...this.movies, ...this.series];
       });
     },
   },
