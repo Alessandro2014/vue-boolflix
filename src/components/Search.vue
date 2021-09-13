@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <input type="text" :placeholder="placeholder"
         v-model.trim="inputValue" @keyup.enter="startSearch">
     <button type="submit" @click="startSearch">{{ buttonText || "Cerca" }}</button>
@@ -32,9 +31,13 @@ name: "Search",
 
 <style scoped lang="scss">
 // INPUT e BUTTON
-input, button {
-  padding: 5px 20px;
-  margin: 0 10px;
+input {
+  padding: 5px 30px;
+}
+
+button {
+  padding: 5px 10px;
+  margin: 0 5px;
 }
 
 

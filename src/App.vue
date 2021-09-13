@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <header>
+      <h1>BOOLFLIX</h1>
       <Search placeholder="Ricerca film..." @search="getResults" />
     </header>
     <main class="container">
@@ -58,7 +59,6 @@ export default {
     };
     axios.get(`${this.api.baseUri}/${endpoint}`, params).then((res) => {
         this[entity] = res.data.results;
-        console.log(res.data.results);
       });
   },
  },
@@ -82,10 +82,17 @@ export default {
 // HEADER
 header {
   height: 100px;
-  background-color: chocolate;
+  background-color: black;
   padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+header h1 {
+  font-size: 60px;
+  color: red;
+}
 
 // MAIN
 
@@ -96,7 +103,6 @@ header {
   justify-content: center;
   flex-wrap: wrap;
 }
-
 
 ul {
   list-style-type: none;
