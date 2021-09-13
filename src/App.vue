@@ -1,92 +1,68 @@
 <template>
   <div id="app">
     <header>
-      <input type="text" placeholder="Ricerca film"
-          v-model.trim="userSearch">
-      <button @click="search">Cerca</button>
-      <button @click="resetInput">Reset</button>
-
+      <Search placeholder="Ricerca film..." @search="getResults" />
     </header>
-    <main>
-      <div v-for="(movie, id) in catalogo" :key="id">
-        <img src="" alt="">
-        <h4>{{ movie.title }}</h4>
-        <h4>{{ movie.original_title }}</h4> 
-        <span>Lingua originale: </span>  
-        <img class="original-language" v-if="movie.original_language === 'en'" src="@/assets/images/en.png" alt="language" /> 
-        <img class="original-language" v-if="movie.original_language === 'it'" src="@/assets/images/it.png" alt="language" /> 
-        <span v-if="movie.original_language != 'en' && movie.original_language != 'it'"> {{ movie.original_language }} </span>
-        <div> {{ movie.vote_average }} </div> 
-      </div>
-
+    <main class="container">
+        <ul v-for="movie in catalogue" :key="movie.id">
+          <SingleCard :movie="movie"/>
+        </ul>
     </main>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Search from '@/components/Search.vue';
+import SingleCard from '@/components/SingleCard.vue';
 export default {
   name: 'App',
   data() {
     return {
-      userSearch: "",
       movies: [],
       series: [],
-      catalogo: [],
-      baseUri: "https://api.themoviedb.org/3",
-      api_key: "e5fb8db6d95f138adcc64dfab8283c0c",
+      api: {
+        baseUri: "https://api.themoviedb.org/3",
+        key: "e5fb8db6d95f138adcc64dfab8283c0c",
+      },
     };
   },
+
   components: {
+    Search,
+    SingleCard,
+  },
+
+  computed: {
+    catalogue() {
+      return [...this.movies, ...this.series];
+    }
   },
   methods: {
-    resetInput() {
-      this.userSearch = "";
-    },
-    search() {
-      this.getMovies();
-      this.getSeries();
-      this.resetInput();
-    },
+    getResults(query) {
+        if (!query) {
+          this.movies = this.series = [];
+          return;
+        }
+        this.fetchApi(query, 'search/movie', 'movies');
+        this.fetchApi(query, 'search/tv', 'series');
+      },
 
-    getMovies() {
-      console.log(this.getMovies);
-    const params = {
+    fetchApi(query, endpoint, entity) {
+      const params = {
         params: {
-          api_key: this.api_key,
-          query: this.userSearch,
+          api_key: this.api.key,
+          query,
           language: "it-IT",
         },
-      };
-
-    axios.get(`${this.baseUri}/search/movie`, params).then((res) => {
-      this.movies = res.data.results;
-      this.catalogo = [...this.movies, ...this.series];
-    });
-    },
-    
-    getSeries() {
-      console.log(this.getSeries);
-
-      const params = {
-          params: {
-            api_key: this.api_key,
-            query: this.userSearch,
-            language: "it-IT",
-          },
-        };
-
-      axios.get(`${this.baseUri}/search/tv`, params).then((res) => {
-        this.series = res.data.results;
-        this.catalogo = [...this.movies, ...this.series];
+    };
+    axios.get(`${this.api.baseUri}/${endpoint}`, params).then((res) => {
+        this[entity] = res.data.results;
+        console.log(res.data.results);
       });
-    },
   },
-  computed: {
-    
-  },
-  
-}
+ },
+};
 </script>
 
 <style lang="scss">
@@ -94,7 +70,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
 }
 
 // UTILS
@@ -111,15 +86,21 @@ header {
   padding: 30px;
 }
 
-input, button {
-  padding: 5px 20px;
-  margin: 0 10px;
+
+// MAIN
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
-.original-language {
-  height: auto;
-  width: 30px;
-}
 
+ul {
+  list-style-type: none;
+  margin: 20px;
+}
 
 </style>
