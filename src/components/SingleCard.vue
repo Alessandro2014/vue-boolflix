@@ -12,7 +12,7 @@
           Titolo Originale: <strong>{{ item.original_title || item.original_name }}</strong>
         </div> 
         <div>
-          divngua originale:   
+          Lingua originale:   
           <img class="original-language" v-if="item.original_language === 'en'" src="@/assets/images/en.png" :alt="item.original_language" /> 
           <img class="original-language" v-if="item.original_language === 'it'" src="@/assets/images/it.png" :alt="item.original_language" />
           <span class="language" v-if="item.original_language != 'en' && item.original_language != 'it'"> {{ item.original_language }} </span>
