@@ -1,19 +1,22 @@
 <template>
   <div>
+    <li class="cover">
+      <img :src="posterPath" :alt="item.title || item.name">
+    </li>
     <li>
-      <img v-if="movie.poster_path" :src="`https://image.tmdb.org/t/p/w342${movie.poster_path}`" alt="poster">
-      <img v-else src="../assets/images/placeholder.png" alt="poster">
-      </li>
-      <li>Titolo: <strong>{{ movie.title || movie.name }}</strong></li>
-      <li>Titolo Originale: <strong>{{ movie.original_title || movie.original_name }}</strong></li> 
-      <li>Lingua originale:   
-        <img class="original-language" v-if="movie.original_language === 'en'" src="@/assets/images/en.png" alt="language" /> 
-        <img class="original-language" v-if="movie.original_language === 'it'" src="@/assets/images/it.png" alt="language" />
-        <span class="language" v-if="movie.original_language != 'en' && movie.original_language != 'it'"> {{ movie.original_language }} </span>
-      </li>
+      Titolo:<strong>{{ item.title || item.name }}</strong>
+    </li>
     <li>
-      Voto: <i v-for="(star, index) in voteAverage()" :key="index" class="fas fa-star"></i>
-      <i v-for="(star, index) in printFarStars()" :key="index" class="far fa-star"></i>
+      Titolo Originale: <strong>{{ item.original_title || item.original_name }}</strong>
+    </li> 
+    <li>
+      Lingua originale:   
+      <img class="original-language" v-if="item.original_language === 'en'" src="@/assets/images/en.png" :alt="item.original_language" /> 
+      <img class="original-language" v-if="item.original_language === 'it'" src="@/assets/images/it.png" :alt="item.original_language" />
+      <span class="language" v-if="item.original_language != 'en' && item.original_language != 'it'"> {{ item.original_language }} </span>
+    </li>
+    <li>
+      <i v-for="n in 5" :key="n" :class="n <= voteAverage ? 'fas' : 'far'" class="fa-star"></i>
     </li> 
   </div>
 </template>
@@ -22,22 +25,25 @@
 
 export default {
     name: "SingleCard",
-    props: ["movie"],
+    props: ["item"],
     data() {
       return {
+        urlImage: "https://image.tmdb.org/t/p/w342",
     };
   },
-  methods: {
+  computed: {
     voteAverage() {
-      const vote = this.movie.vote_average / 2;
+      const vote = this.item.vote_average / 2;
       return (Math.ceil(vote));
     },
-    
-    printFarStars() {
-      const resultVote = 5 - this.voteAverage();
-      return resultVote;
-    }
-  }
+
+    posterPath() {
+      if(this.item.poster_path) {
+        return this.urlImage + this.item.poster_path;
+      }
+      return 'https://www.altavod.com/assets/images/poster-placeholder.png';
+    },
+  },
 
   
 };
@@ -46,7 +52,8 @@ export default {
 <style scoped lang="scss">
 .original-language {
   height: auto;
-  max-width: 30px;
+  max-width: 25px;
+  vertical-align: middle;
 }
 
 .language {
@@ -54,11 +61,16 @@ export default {
 }
 
 li {
-  max-width: 250px;
+  text-align: center;
   height: auto;
   background-image: url();
   img {
     width: 100%;
   }
 }
+
+.fa-star {
+  color: goldenrod;
+}
+
 </style>

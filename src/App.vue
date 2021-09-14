@@ -5,9 +5,8 @@
       <Search placeholder="Ricerca film..." @search="getResults" />
     </header>
     <main class="container">
-        <ul v-for="movie in catalogue" :key="movie.id">
-          <SingleCard :movie="movie"/>
-        </ul>
+      <Main title="Film " id="film" :items="movies"/>
+      <Main title="Serie TV " id="series TV" :items="series"/>
     </main>
   </div>
 </template>
@@ -15,7 +14,7 @@
 <script>
 import axios from "axios";
 import Search from '@/components/Search.vue';
-import SingleCard from '@/components/SingleCard.vue';
+import Main from '@/components/Main.vue';
 export default {
   name: 'App',
   data() {
@@ -31,14 +30,10 @@ export default {
 
   components: {
     Search,
-    SingleCard,
+    Main,
   },
 
-  computed: {
-    catalogue() {
-      return [...this.movies, ...this.series];
-    }
-  },
+  computed: {},
   methods: {
     getResults(query) {
         if (!query) {
@@ -68,8 +63,6 @@ export default {
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 // UTILS
