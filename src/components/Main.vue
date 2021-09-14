@@ -1,9 +1,11 @@
 <template>
   <div :id="id">
-      <h2>{{title}}</h2>
-    <ul v-for="(item, index) in items" :key="item.id + '-' + index">
-          <SingleCard :item="item"/>
-    </ul>
+      <!-- STAMPA DINAMICA FILM/SERIE -->
+    <h2 v-if="items.length > 0">{{ title }}</h2> 
+    <!-- CICLO PER STAMPA ITEM -->
+    <div v-for="(item, index) in items" :key="item.id + '-' + index">
+        <SingleCard :item="item"/>
+    </div>
   </div>
 </template>
 
@@ -19,21 +21,15 @@ export default {
       return {
     };
   },
-  methods: {}
-
-  
 };
 </script>
 
 <style scoped lang="scss">
-
 h2 {
-    text-align: center;
-    font-size: 28px;
-    margin-top: 30px;
-}
-.cover:hover {
-  display: none;
-  background-color: chartreuse;
+    font-size: 38px;
+    margin: 30px 10px;
+    color: red;
+    width: 100%;
+    
 }
 </style>

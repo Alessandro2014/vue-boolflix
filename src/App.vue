@@ -5,6 +5,7 @@
       <Search placeholder="Ricerca film..." @search="getResults" />
     </header>
     <main class="container">
+      <!-- TRASFERIMENTO INFORMAZIONI AL COMPONENTE CARD -->
       <Main title="Film " id="film" :items="movies"/>
       <Main title="Serie TV " id="series TV" :items="series"/>
     </main>
@@ -61,8 +62,10 @@ export default {
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Glory:wght@100&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Glory:wght@100;400;500&display=swap');
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Glory', sans-serif;
 }
 
 // UTILS
@@ -72,10 +75,14 @@ export default {
   margin: 0;
 }
 
+body {
+    background-color: black;
+}
+
 // HEADER
 header {
   height: 100px;
-  background-color: black;
+  background-color: rgb(51, 51, 51);
   padding: 30px;
   display: flex;
   justify-content: space-between;
@@ -92,14 +99,11 @@ header h1 {
 .container {
   max-width: 1400px;
   margin: 0 auto;
+}
+
+.container > div {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
 }
-
-ul {
-  list-style-type: none;
-  margin: 20px;
-}
-
 </style>
